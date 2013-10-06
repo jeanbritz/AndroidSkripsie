@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    2011 Foxykeep (http://datadroid.foxykeep.com)
+    Licensed under the Beerware License : 
+    As long as you retain this notice you can do whatever you want with this stuff. If we meet some 
+    day, and you think this stuff is worth it, you can buy me a beer in return
+-->
+<resources>
+
+    <string name="app_name">NFCPaySystem</string>
+
+    <!-- Dialog texts -->
+    <string name="dialog_error_connection_error_title">Connection error</string>
+    <string name="dialog_error_connection_error_message">A connetion error occurred. Please verify
+ that you are connected to an EDGE, 3G or Wifi network.</string>
+    <string name="dialog_error_data_error_title">Incorrect data</string>
+    <string name="dialog_error_data_error_message">Received data is invalid.</string>
+    <string name="dialog_error_title">Error</string>
+    <string name="dialog_button_retry">Retry</string>
+    <string name="progress_dialog_title">Loading</string>
+    <string name="progress_dialog_message">Loading in progress…</string>
+
+
+    <!-- PersonListActivity texts -->
+    <string name="claim_list_title">NFCPaySystem &gt; Claims</string>
+    <string name="claim_list_b_load">Load</string>
+    <string name="claim_list_b_clear_db">Clear DB</string>
+    <string name="claim_list_tv_empty">No claims found</string>
+    <!-- <string name="claim_list_item_tv_age_format">%1$d yrs old</string>-->
+    <string name="refresh_menu_refresh">Refresh</string>
+    <string name="home_claim_list_title">Claims</string>
+    <string name="home_claim_list_description">List of tickets and vouchers to claim at an NFC Access Point</string>
+    <string name="authentication_b_load">Auth</string>
+    <string name="transaction_list_b_load">Load</string>
+    <string name="home_transaction_list_title">Transactions</string>
+    <string name="home_transaction_list_description">View transactions</string>
+    <string name="transaction_list_title">NFCPaySystem &gt; Transactions</string>
+
+   
+</resources>
