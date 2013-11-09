@@ -7,6 +7,10 @@ import com.foxykeep.datadroid.service.RequestService;
 import com.paysystem.mobileapp.data.exception.MyCustomRequestException;
 import com.paysystem.mobileapp.data.operation.AuthenticationOperation;
 import com.paysystem.mobileapp.data.operation.ClaimListOperation;
+import com.paysystem.mobileapp.data.operation.InvoiceListOperation;
+import com.paysystem.mobileapp.data.operation.CrudSyncNfcDeviceAddEditOperation;
+import com.paysystem.mobileapp.data.operation.CrudSyncNfcDeviceDeleteOperation;
+import com.paysystem.mobileapp.data.operation.CrudSyncNfcDeviceListOperation;
 import com.paysystem.mobileapp.data.operation.TransactionListOperation;
 import com.paysystem.mobileapp.data.requestmanager.paySystemRequestFactory;
 
@@ -32,6 +36,15 @@ public final class paySystemRequestService extends RequestService {
                 return new ClaimListOperation();
             case paySystemRequestFactory.REQUEST_TYPE_TRANSACTION_LIST:
             	return new TransactionListOperation();
+            case paySystemRequestFactory.REQUEST_TYPE_INVOICE_LIST:
+            	return new InvoiceListOperation();
+            case paySystemRequestFactory.REQUEST_TYPE_CRUD_SYNC_NFCDEVICE_LIST:
+            	return new CrudSyncNfcDeviceListOperation();
+            case paySystemRequestFactory.REQUEST_TYPE_CRUD_SYNC_NFCDEVICE_ADD:
+            case paySystemRequestFactory.REQUEST_TYPE_CRUD_SYNC_NFCDEVICE_EDIT:
+            	return new CrudSyncNfcDeviceAddEditOperation();
+            case paySystemRequestFactory.REQUEST_TYPE_CRUD_SYNC_NFCDEVICE_DELETE:
+            	return new CrudSyncNfcDeviceDeleteOperation();
             case paySystemRequestFactory.REQUEST_TYPE_AUTHENTICATION:
                 return new AuthenticationOperation();
             
@@ -44,8 +57,8 @@ public final class paySystemRequestService extends RequestService {
     protected Bundle onCustomRequestException(Request request, CustomRequestException exception) {
         if (exception instanceof MyCustomRequestException) {
             Bundle bundle = new Bundle();
-            //bundle.putString(paySystemRequestFactory.BUNDLE_EXTRA_ERROR_MESSAGE,
-               //     "MyCustomRequestException thrown.");
+           // bundle.putString(paySystemRequestFactory.BUNDLE_EXTRA_ERROR_MESSAGE,
+          //          "MyCustomRequestException thrown.");
             return bundle;
         }
         return super.onCustomRequestException(request, exception);

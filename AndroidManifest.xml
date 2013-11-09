@@ -3,7 +3,7 @@
     2011 Foxykeep (http://datadroid.foxykeep.com)
     Licensed under the Beerware	License : 
     As long as you retain this notice you can do whatever you want with this stuff. If we meet some 
-    day, and you think this stuff is worth it, you can buy me a beer in return
+    day, and you think this stuff is worth it, you can buy me a beer in return
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.paysystem.mobileapp"
@@ -14,6 +14,7 @@
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
 
+    <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -22,7 +23,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".ui.HomeActivity"
+            android:name="com.paysystem.mobileapp.ui.feature.AuthenticationActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,20 +32,32 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.ws.ClaimListActivity"
+            android:name="com.paysystem.mobileapp.ui.feature.PaymentActivity"
+            android:label="@string/payment_title" />
+        <activity
+            android:name="com.paysystem.mobileapp.ui.ws.ClaimListActivity"
             android:label="@string/claim_list_title" />
         <activity
-            android:name=".ui.ws.TransactionListActivity"
+            android:name="com.paysystem.mobileapp.ui.ws.TransactionListActivity"
             android:label="@string/transaction_list_title" />
-
+        <activity
+            android:name="com.paysystem.mobileapp.ui.ws.InvoiceListActivity"
+            android:label="@string/invoice_list_title" />
+		
         <service
-            android:name=".data.service.paySystemRequestService"
+            android:name="com.paysystem.mobileapp.data.service.paySystemRequestService"
             android:exported="false" />
 
         <provider
-            android:name=".data.provider.paySystemProvider"
+            android:name="com.paysystem.mobileapp.data.provider.paySystemProvider"
             android:authorities="com.paysystem.mobileapp.provider.paySystemProvider"
             android:exported="false" />
+        
+        <activity
+            android:name="com.paysystem.mobileapp.ui.HomeActivity"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+        </activity>
     </application>
 
 </manifest>

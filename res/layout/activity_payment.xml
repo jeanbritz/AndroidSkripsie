@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/btn_make_payment"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_below="@+id/et_amount"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="96dp"
+        android:text="@string/btn_make_payment_title" />
+    
+    <EditText
+        android:id="@+id/et_amount"
+        android:layout_width="match_parent"
+        android:inputType="number"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tv_type_amount_label"
+        android:layout_marginTop="28dp"
+        android:ems="10">
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/tv_type_amount_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="96dp"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/tv_invoice_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="15dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/tv_amount_payable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tv_invoice_id"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+</RelativeLayout>

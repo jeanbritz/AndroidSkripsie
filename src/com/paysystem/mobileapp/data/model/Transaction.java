@@ -10,7 +10,7 @@ public final class Transaction {
 	
     public int id;
     public int invoice_id;
-    public String username;
+    public int user;
     public String processed_date;
     public int amount;
     public String debit_credit;
@@ -23,7 +23,7 @@ public final class Transaction {
         ContentValues cv = new ContentValues();
         cv.put(Transactions.Columns.ID.getName(), id);
         cv.put(Transactions.Columns.INVOICE_ID.getName(), invoice_id);
-        cv.put(Transactions.Columns.USERNAME.getName(), username);
+        cv.put(Transactions.Columns.USER.getName(), user);
         cv.put(Transactions.Columns.PROCESSED_DATE.getName(), processed_date);
         cv.put(Transactions.Columns.AMOUNT.getName(), amount);
         cv.put(Transactions.Columns.DEBIT_CREDIT.getName(), debit_credit);

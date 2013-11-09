@@ -27,4 +27,13 @@ public final class UserManager {
         return userId;
     }
 	
+	public static String getAuthHeader(Context context){
+		
+		SharedPreferences sharedPrefs = context.getSharedPreferences(
+                SharedPrefsConfig.SHARED_PREFS_FILENAME,
+                Context.MODE_PRIVATE);
+		return null;
+		
+	}
+	
 }

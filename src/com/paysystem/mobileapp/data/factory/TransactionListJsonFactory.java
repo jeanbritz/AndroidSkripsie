@@ -24,7 +24,7 @@ public final class TransactionListJsonFactory {
         ArrayList<Transaction> transactionList = new ArrayList<Transaction>();
 
         try {
-        	Log.i(TAG, "Parsing response to JSON Array");
+        	
         	JSONArray jsonTransactionArray =  new JSONArray(wsResponse);
             
             int size = jsonTransactionArray.length();
@@ -35,12 +35,11 @@ public final class TransactionListJsonFactory {
                                                         
                 	transaction.id = jsonTransaction.getInt(JSONTag.TRANSACTION_LIST_ELEM_ID);
                 	transaction.invoice_id = jsonTransaction.getInt(JSONTag.TRANSACTION_LIST_ELEM_INVOICE_ID);
-                	transaction.username = jsonTransaction.getString(JSONTag.TRANSACTION_LIST_ELEM_USERNAME);
+                	transaction.user = jsonTransaction.getInt(JSONTag.TRANSACTION_LIST_ELEM_USERNAME);
                 	transaction.processed_date = jsonTransaction.getString(JSONTag.TRANSACTION_LIST_ELEM_PROCESSED_DATE);
                 	transaction.amount = jsonTransaction.getInt(JSONTag.TRANSACTION_LIST_ELEM_AMOUNT);
                 	transaction.debit_credit = jsonTransaction.getString(JSONTag.TRANSACTION_LIST_ELEM_DEBIT_CREDIT);
-                   
-                	transactionList.add(transaction);
+                   	transactionList.add(transaction);
                
             }
         } catch (JSONException e) {

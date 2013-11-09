@@ -3,6 +3,7 @@ package com.paysystem.mobileapp.ui.ws;
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.paysystem.mobileapp.R;
+import com.paysystem.mobileapp.data.model.Claim;
 import com.paysystem.mobileapp.data.provider.paySystemContent.Claims;
 import com.paysystem.mobileapp.data.provider.util.ProviderCriteria;
 import com.paysystem.mobileapp.data.requestmanager.paySystemRequestFactory;
@@ -10,34 +11,54 @@ import com.paysystem.mobileapp.dialogs.ConnectionErrorDialogFragment;
 import com.paysystem.mobileapp.dialogs.ConnectionErrorDialogFragment.ConnectionErrorDialogListener;
 import com.paysystem.mobileapp.ui.DataDroidActivity;
 
+
+
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.database.CharArrayBuffer;
 import android.database.Cursor;
+import android.nfc.NdefMessage;
+import android.nfc.NdefRecord;
+import android.nfc.NfcAdapter;
+import android.nfc.NfcAdapter.CreateNdefMessageCallback;
+import android.nfc.NfcAdapter.OnNdefPushCompleteCallback;
+import android.nfc.NfcEvent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public final class ClaimListActivity extends DataDroidActivity implements RequestListener,
-        OnClickListener, ConnectionErrorDialogListener, LoaderCallbacks<Cursor> {
+        OnClickListener,OnItemLongClickListener,CreateNdefMessageCallback, OnNdefPushCompleteCallback, ConnectionErrorDialogListener, LoaderCallbacks<Cursor> {
 
-    private Spinner mSpinnerReturnFormat;
     private ListView mListView;
     private ClaimListAdapter mListAdapter;
-
+    private NfcAdapter mNfcAdapter;
+    private String rawNDEFClaim = "";
+    
     private LayoutInflater mInflater;
 
-    @Override
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+	@SuppressLint("NewApi")
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
@@ -47,6 +68,17 @@ public final class ClaimListActivity extends DataDroidActivity implements Reques
 
         getSupportLoaderManager().initLoader(0, null, this);
         mInflater = getLayoutInflater();
+       
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+		if (mNfcAdapter == null) {
+			Toast.makeText(this, "NFC is not available", Toast.LENGTH_LONG)
+					.show();
+			finish();
+			return;
+		}
+		// Register callback
+		mNfcAdapter.setNdefPushMessageCallback(this, this);
+		mNfcAdapter.setOnNdefPushCompleteCallback(this,this);
     }
 
     @Override
@@ -87,12 +119,16 @@ public final class ClaimListActivity extends DataDroidActivity implements Reques
 
     private void bindViews() {
         ((Button) findViewById(R.id.b_load)).setOnClickListener(this);
-        
-
+       
         mListView = (ListView) findViewById(android.R.id.list);
+        mListView.setOnItemLongClickListener(this);
+        
         mListView.setEmptyView(findViewById(android.R.id.empty));
         mListAdapter = new ClaimListAdapter(this);
         mListView.setAdapter(mListAdapter);
+        
+        
+        
     }
 
     private void callClaimListWS() {
@@ -213,11 +249,9 @@ public final class ClaimListActivity extends DataDroidActivity implements Reques
             
             mTextViewAmount.setText(String.valueOf(c.getInt(Claims.Columns.AMOUNT
                     .getIndex())));
-          
-            //  mTextViewAge.setText(getString(R.string.person_list_item_tv_age_format,
-            //        c.getInt(Claims.Columns.AGE.getIndex())));
-
-           
+            
+            
+                   
         }
     }
 
@@ -239,4 +273,77 @@ public final class ClaimListActivity extends DataDroidActivity implements Reques
             return view;
         }
     }
+
+	@Override
+	public boolean onItemLongClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		
+		 int idd = mListAdapter.getCursor().getInt(Claims.Columns.ID.getIndex());
+		 int user = mListAdapter.getCursor().getInt(Claims.Columns.USER.getIndex());
+		 String title = mListAdapter.getCursor().getString(Claims.Columns.TITLE.getIndex());
+		 String type = mListAdapter.getCursor().getString(Claims.Columns.TYPE.getIndex());
+		 String expiry_date =  mListAdapter.getCursor().getString(Claims.Columns.EXPIRY_DATE.getIndex());
+		 int amount  = mListAdapter.getCursor().getInt(Claims.Columns.AMOUNT.getIndex());
+		 
+		 String user_temp = "";
+		 String claim_temp = "";
+		 if(user < 10)
+		 {
+			 user_temp = "0"+user;
+		 }
+		 else
+		 {
+			 user_temp = ""+user;
+		 }
+		 if(idd < 10)
+		 {
+			 claim_temp = "0"+idd;
+		 }
+		 else
+		 {
+			 claim_temp = ""+idd;
+		 }
+		 
+		 if (type.startsWith("V"))
+		 {
+			 
+			 rawNDEFClaim = "V"+user_temp+","+claim_temp+","+title.trim()+","+expiry_date+","+amount+"\0";
+		 }
+		 else
+		 {
+			 rawNDEFClaim = "T"+user_temp+","+claim_temp+","+title.trim()+","+expiry_date+","+amount+"\0";
+		 }
+		 Toast.makeText(this, "Hold device near the Controller Module to proceed", Toast.LENGTH_LONG)
+			.show();
+		 Log.i("String for NFC", ""+ rawNDEFClaim);
+		 
+		return false;
+		
+	}
+
+	@Override
+	public void onNdefPushComplete(NfcEvent event) {
+		rawNDEFClaim = "";
+		
+	}
+
+	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
+	@Override
+	public NdefMessage createNdefMessage(NfcEvent event) {
+		if (rawNDEFClaim.equals(""))
+		{
+			Toast.makeText(this, "No item has been specified", Toast.LENGTH_LONG)
+			.show();
+			return new NdefMessage(new NdefRecord[] {  });
+		}
+		else
+		{
+			byte[] textBytes = rawNDEFClaim.getBytes();
+			NdefRecord textRecord = new NdefRecord(NdefRecord.TNF_MIME_MEDIA,
+					"text/plain".getBytes(), new byte[] {}, textBytes);
+			return new NdefMessage(new NdefRecord[] { textRecord });
+		}
+		
+		
+	}
 }

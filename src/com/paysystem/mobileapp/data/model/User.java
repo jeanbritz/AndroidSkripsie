@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 public final class User implements Parcelable {
 
-    public String id;
+    public int id;
     public String username;
     public String first_name;
     public String last_name;
@@ -22,7 +22,7 @@ public final class User implements Parcelable {
 
     // Parcelable management
     private User(Parcel in) {
-        id = in.readString();
+        id = in.readInt();
         username = in.readString();
         first_name = in.readString();
         last_name = in.readString();
@@ -41,7 +41,7 @@ public final class User implements Parcelable {
     }
 
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(id);
+        dest.writeInt(id);
         dest.writeString(username);
         dest.writeString(first_name);
         dest.writeString(last_name);

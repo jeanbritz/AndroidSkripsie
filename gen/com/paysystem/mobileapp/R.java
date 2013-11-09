@@ -15,38 +15,105 @@ public final class R {
         public static final int icon=0x7f020001;
     }
     public static final class id {
-        public static final int b_load=0x7f070000;
-        public static final int menu_refresh=0x7f070009;
-        public static final int tv_amount=0x7f070003;
-        public static final int tv_debit_credit=0x7f070007;
-        public static final int tv_expiry_date=0x7f070005;
-        public static final int tv_invoice_id=0x7f070006;
-        public static final int tv_processed_date=0x7f070008;
-        public static final int tv_result=0x7f070001;
-        public static final int tv_title=0x7f070004;
-        public static final int tv_type=0x7f070002;
+        public static final int action_forgot_password=0x7f070017;
+        public static final int b_load=0x7f07000d;
+        public static final int btnPayOtherInvoice=0x7f070012;
+        public static final int btn_make_payment=0x7f070007;
+        public static final int email=0x7f070003;
+        public static final int et_amount=0x7f070008;
+        public static final int login=0x7f070005;
+        public static final int login_form=0x7f070002;
+        public static final int login_status=0x7f070000;
+        public static final int login_status_message=0x7f070001;
+        public static final int menu_refresh=0x7f070018;
+        public static final int password=0x7f070004;
+        public static final int sign_in_button=0x7f070006;
+        public static final int tv_amount=0x7f07000f;
+        public static final int tv_amount_payable=0x7f07000b;
+        public static final int tv_debit_credit=0x7f070015;
+        public static final int tv_expiry_date=0x7f070011;
+        public static final int tv_invoice_id=0x7f07000a;
+        public static final int tv_issued_date=0x7f070013;
+        public static final int tv_processed_date=0x7f070016;
+        public static final int tv_title=0x7f070010;
+        public static final int tv_type=0x7f07000e;
+        public static final int tv_type_amount_label=0x7f070009;
+        public static final int tv_value=0x7f070014;
+        public static final int username=0x7f07000c;
     }
     public static final class layout {
-        public static final int authentication=0x7f030000;
-        public static final int claim_list=0x7f030001;
-        public static final int claim_list_item=0x7f030002;
-        public static final int home=0x7f030003;
-        public static final int home_dialog_sample_description=0x7f030004;
-        public static final int transaction_list=0x7f030005;
-        public static final int transaction_list_item=0x7f030006;
+        public static final int activity_login=0x7f030000;
+        public static final int activity_payment=0x7f030001;
+        public static final int authentication=0x7f030002;
+        public static final int claim_list=0x7f030003;
+        public static final int claim_list_item=0x7f030004;
+        public static final int home=0x7f030005;
+        public static final int home_dialog_sample_description=0x7f030006;
+        public static final int invoice_list=0x7f030007;
+        public static final int invoice_list_item=0x7f030008;
+        public static final int location=0x7f030009;
+        public static final int location_list_item=0x7f03000a;
+        public static final int transaction_list=0x7f03000b;
+        public static final int transaction_list_item=0x7f03000c;
     }
     public static final class menu {
-        public static final int refresh=0x7f060000;
+        public static final int login=0x7f060000;
+        public static final int refresh=0x7f060001;
     }
     public static final class string {
+        public static final int action_forgot_password=0x7f040044;
+        public static final int action_sign_in_register=0x7f040042;
+        public static final int action_sign_in_short=0x7f040043;
         public static final int app_name=0x7f040000;
         public static final int authentication_b_load=0x7f040010;
+        public static final int btn_make_payment_title=0x7f04003e;
         public static final int claim_list_b_clear_db=0x7f04000b;
         public static final int claim_list_b_load=0x7f04000a;
         /**  PersonListActivity texts 
          */
         public static final int claim_list_title=0x7f040009;
         public static final int claim_list_tv_empty=0x7f04000c;
+        public static final int crud_nfcdevice_add_edit_b_submit=0x7f04003b;
+        public static final int crud_nfcdevice_add_edit_tv_android_version=0x7f040038;
+        public static final int crud_nfcdevice_add_edit_tv_manufacturer=0x7f040037;
+        /**  CrudSyncNfcDeviceAddEditActivity and CrudAsyncnfcdeviceAddEditActivity 
+         */
+        public static final int crud_nfcdevice_add_edit_tv_name=0x7f040036;
+        public static final int crud_nfcdevice_add_edit_tv_price=0x7f04003a;
+        public static final int crud_nfcdevice_add_edit_tv_screen_size=0x7f040039;
+        public static final int crud_nfcdevice_list_context_menu_delete=0x7f040026;
+        public static final int crud_nfcdevice_list_context_menu_edit=0x7f040025;
+        public static final int crud_nfcdevice_list_dialog_delete_all_confirm_message=0x7f040028;
+        public static final int crud_nfcdevice_list_dialog_delete_all_confirm_title=0x7f040027;
+        public static final int crud_nfcdevice_list_dialog_delete_confirm_message=0x7f04002a;
+        public static final int crud_nfcdevice_list_dialog_delete_confirm_title=0x7f040029;
+        public static final int crud_nfcdevice_list_menu_add=0x7f040023;
+        public static final int crud_nfcdevice_list_menu_delete_all=0x7f040024;
+        /**  CrudSyncNfcdeviceListActivity and CrudAsyncNfcdeviceListActivity texts 
+         */
+        public static final int crud_nfcdevice_list_tv_empty_loading=0x7f040021;
+        public static final int crud_nfcdevice_list_tv_empty_no_results=0x7f040022;
+        public static final int crud_nfcdevice_view_dialog_delete_confirm_message=0x7f040034;
+        public static final int crud_nfcdevice_view_dialog_delete_confirm_title=0x7f040033;
+        public static final int crud_nfcdevice_view_menu_delete=0x7f040032;
+        public static final int crud_nfcdevice_view_menu_edit=0x7f040031;
+        /**  CrudSyncnfcdeviceViewActivity and CrudAsyncnfcdeviceViewActivity texts 
+         */
+        public static final int crud_nfcdevice_view_tv_android_version=0x7f04002c;
+        public static final int crud_nfcdevice_view_tv_price=0x7f04002f;
+        public static final int crud_nfcdevice_view_tv_price_format=0x7f040030;
+        public static final int crud_nfcdevice_view_tv_screen_size=0x7f04002d;
+        public static final int crud_nfcdevice_view_tv_screen_size_format=0x7f04002e;
+        /**  CrudSyncNfcDeviceAddEditActivity texts 
+         */
+        public static final int crud_sync_nfcdevice_add_title=0x7f04003c;
+        public static final int crud_sync_nfcdevice_edit_title=0x7f04003d;
+        /**  CrudSyncnfcdeviceListActivity texts 
+         */
+        public static final int crud_sync_nfcdevice_list_title=0x7f04002b;
+        /**  CrudSyncNfcDeviceViewActivity texts 
+         */
+        public static final int crud_sync_nfcdevice_view_title=0x7f040035;
         public static final int dialog_button_retry=0x7f040006;
         public static final int dialog_error_connection_error_message=0x7f040002;
         /**  Dialog texts 
@@ -55,12 +122,34 @@ public final class R {
         public static final int dialog_error_data_error_message=0x7f040004;
         public static final int dialog_error_data_error_title=0x7f040003;
         public static final int dialog_error_title=0x7f040005;
+        public static final int error_field_required=0x7f040049;
+        public static final int error_incorrect_password=0x7f040048;
+        public static final int error_invalid_email=0x7f040046;
+        public static final int error_invalid_password=0x7f040047;
         public static final int home_claim_list_description=0x7f04000f;
         public static final int home_claim_list_title=0x7f04000e;
+        public static final int home_invoice_list_description=0x7f04001e;
+        public static final int home_invoice_list_title=0x7f04001d;
         public static final int home_transaction_list_description=0x7f040013;
         public static final int home_transaction_list_title=0x7f040012;
+        public static final int invoice_list_b_load=0x7f04001f;
+        public static final int invoice_list_title=0x7f040020;
+        public static final int location_cellid_title=0x7f040018;
+        public static final int location_lac_title=0x7f040017;
+        public static final int location_lat_title=0x7f04001a;
+        public static final int location_long_title=0x7f04001b;
+        public static final int location_mcc_title=0x7f040015;
+        public static final int location_mnc_title=0x7f040016;
+        public static final int location_network_title=0x7f040019;
+        public static final int location_range_title=0x7f04001c;
+        public static final int login_progress_signing_in=0x7f040045;
+        public static final int payment_title=0x7f04003f;
         public static final int progress_dialog_message=0x7f040008;
         public static final int progress_dialog_title=0x7f040007;
+        /**  Strings related to login 
+         */
+        public static final int prompt_email=0x7f040040;
+        public static final int prompt_password=0x7f040041;
         /**  <string name="claim_list_item_tv_age_format">%1$d yrs old</string>
          */
         public static final int refresh_menu_refresh=0x7f04000d;
@@ -69,5 +158,6 @@ public final class R {
     }
     public static final class style {
         public static final int AppTheme=0x7f050000;
+        public static final int LoginFormContainer=0x7f050001;
     }
 }

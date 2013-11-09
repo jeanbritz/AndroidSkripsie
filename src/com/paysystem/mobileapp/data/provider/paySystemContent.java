@@ -38,7 +38,7 @@ public abstract class paySystemContent {
 
         public static enum Columns implements ColumnMetadata {
             ID(BaseColumns._ID, "integer"),
-            USERNAME("username", "text"),
+            USER("user", "integer"),
             TITLE("title", "text"),
             TYPE("type", "integer"),
             EXPIRY_DATE("expiry_date", "text"),
@@ -71,7 +71,7 @@ public abstract class paySystemContent {
 
         public static final String[] PROJECTION = new String[] {
                 Columns.ID.getName(),
-                Columns.USERNAME.getName(),
+                Columns.USER.getName(),
                 Columns.TITLE.getName(),
                 Columns.TYPE.getName(),
                 Columns.EXPIRY_DATE.getName(),
@@ -90,7 +90,7 @@ public abstract class paySystemContent {
             db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME 
             		+ " (" 
             				+ Columns.ID.getName() + " " + Columns.ID.getType() 
-            				+ ", " + Columns.USERNAME.getName() + " " + Columns.USERNAME.getType()
+            				+ ", " + Columns.USER.getName() + " " + Columns.USER.getType()
             				+ ", " + Columns.TITLE.getName() + " " + Columns.TITLE.getType() 
             				+ ", " + Columns.TYPE.getName() + " "  + Columns.TYPE.getType() 
             				+ ", " + Columns.EXPIRY_DATE.getName() + " " + Columns.EXPIRY_DATE.getType() 
@@ -98,8 +98,8 @@ public abstract class paySystemContent {
             				+ ", " + Columns.AMOUNT.getName() + " " + Columns.AMOUNT.getType() 
             				+ ", PRIMARY KEY (" + Columns.ID.getName() + ")" + ");");
 
-            db.execSQL("CREATE INDEX IF NOT EXISTS DbClaim_username on " + TABLE_NAME + "(" + Columns.USERNAME.getName() + ");");
-            db.execSQL("CREATE INDEX IF NOT EXISTS DbClaim_title on " + TABLE_NAME + "(" + Columns.TITLE.getName() + ");");
+           // db.execSQL("CREATE INDEX IF NOT EXISTS DbClaim_username on " + TABLE_NAME + "(" + Columns.USERNAME.getName() + ");");
+          //  db.execSQL("CREATE INDEX IF NOT EXISTS DbClaim_title on " + TABLE_NAME + "(" + Columns.TITLE.getName() + ");");
             if (paySystemProvider.ACTIVATE_ALL_LOGS) {
                 Log.d(LOG_TAG, "Claims | createTable end");
             }
@@ -132,14 +132,14 @@ public abstract class paySystemContent {
         }
 
         static String getBulkInsertString() {
-            return new StringBuilder("INSERT INTO ").append(TABLE_NAME).append(" ( ").append(Columns.ID.getName()).append(", ").append(Columns.USERNAME.getName()).append(", ").append(Columns.TITLE.getName()).append(", ").append(Columns.TYPE.getName()).append(", ").append(Columns.EXPIRY_DATE.getName()).append(", ").append(Columns.CLAIMED.getName()).append(", ").append(Columns.AMOUNT.getName()).append(" ) VALUES (?, ?, ?, ?, ?, ?, ?)").toString();
+            return new StringBuilder("INSERT INTO ").append(TABLE_NAME).append(" ( ").append(Columns.ID.getName()).append(", ").append(Columns.USER.getName()).append(", ").append(Columns.TITLE.getName()).append(", ").append(Columns.TYPE.getName()).append(", ").append(Columns.EXPIRY_DATE.getName()).append(", ").append(Columns.CLAIMED.getName()).append(", ").append(Columns.AMOUNT.getName()).append(" ) VALUES (?, ?, ?, ?, ?, ?, ?)").toString();
         }
         
         static void bindValuesInBulkInsert(SQLiteStatement stmt, ContentValues values) {
             int i = 1;
             String value;
             stmt.bindLong(i++, values.getAsLong(Columns.ID.getName()));
-            value = values.getAsString(Columns.USERNAME.getName());
+            value = values.getAsString(Columns.USER.getName());
             stmt.bindString(i++, value != null ? value : "");
             value = values.getAsString(Columns.TITLE.getName());
             stmt.bindString(i++, value != null ? value : "");
@@ -163,6 +163,125 @@ public abstract class paySystemContent {
     /**
      * Created in version 1
      */
+    public static final class Invoices extends paySystemContent {
+
+        private static final String LOG_TAG = Invoices.class.getSimpleName();
+
+        public static final String TABLE_NAME = WSConfig.DB_TABLE_PREFIX + "invoices";
+        public static final String TYPE_ELEM_TYPE = "vnd.android.cursor.item/paysystem_invoices";
+        public static final String TYPE_DIR_TYPE = "vnd.android.cursor.dir/paysystem_invoices";
+
+        public static final Uri CONTENT_URI = Uri.parse(paySystemContent.CONTENT_URI + "/" + TABLE_NAME);
+
+        public static enum Columns implements ColumnMetadata {
+            ID(BaseColumns._ID, "integer"),
+            USER("user", "integer"),
+            AMOUNT_PAYABLE("amount_payable", "integer"),
+            ISSUED_DATE("issued_date", "text");
+            
+
+            private final String mName;
+            private final String mType;
+
+            private Columns(String name, String type) {
+                mName = name;
+                mType = type;
+            }
+
+            @Override
+            public int getIndex() {
+                return ordinal();
+            }
+
+            @Override
+            public String getName() {
+                return mName;
+            }
+
+            @Override
+            public String getType() {
+                return mType;
+            }
+        }
+
+        public static final String[] PROJECTION = new String[] {
+                Columns.ID.getName(),
+                Columns.USER.getName(),
+                Columns.AMOUNT_PAYABLE.getName(),
+                Columns.ISSUED_DATE.getName(),
+                
+        };
+
+        private Invoices() {
+            // No private constructor
+        }
+
+        public static void createTable(SQLiteDatabase db) {
+            if (paySystemProvider.ACTIVATE_ALL_LOGS) {
+                Log.d(LOG_TAG, "Invoices | createTable start");
+            }
+            //db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME + ";");
+            db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME 
+            		+ " (" 
+            				+ Columns.ID.getName() + " " + Columns.ID.getType() 
+            				+ ", " + Columns.USER.getName() + " " + Columns.USER.getType()
+            				+ ", " + Columns.AMOUNT_PAYABLE.getName() + " " + Columns.AMOUNT_PAYABLE.getType()
+            				+ ", " + Columns.ISSUED_DATE.getName() + " " + Columns.ISSUED_DATE.getType() 
+            				+ ", PRIMARY KEY (" + Columns.ID.getName() + ")" + ");");
+
+          //  db.execSQL("CREATE INDEX IF NOT EXISTS DbClaim_username on " + TABLE_NAME + "(" + Columns.USERNAME.getName() + ");");
+         //   db.execSQL("CREATE INDEX IF NOT EXISTS DbClaim_title on " + TABLE_NAME + "(" + Columns.TITLE.getName() + ");");
+            if (paySystemProvider.ACTIVATE_ALL_LOGS) {
+                Log.d(LOG_TAG, "Invoices | createTable end");
+            }
+        }
+
+        // Version 1 : Creation of the table
+        public static void upgradeTable(SQLiteDatabase db, int oldVersion, int newVersion) {
+            if (paySystemProvider.ACTIVATE_ALL_LOGS) {
+                Log.d(LOG_TAG, "DbInvoice | upgradeTable start");
+            }
+
+            if (oldVersion < 1) {
+                Log.i(LOG_TAG, "Upgrading from version " + oldVersion + " to " + newVersion
+                        + ", data will be lost!");
+
+                db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME + ";");
+                createTable(db);
+                return;
+            }
+
+
+            if (oldVersion != newVersion) {
+                throw new IllegalStateException("Error upgrading the database to version "
+                        + newVersion);
+            }
+
+            if (paySystemProvider.ACTIVATE_ALL_LOGS) {
+                Log.d(LOG_TAG, "Invoices | upgradeTable end");
+            }
+        }
+
+        static String getBulkInsertString() {
+            return new StringBuilder("INSERT INTO ").append(TABLE_NAME).append(" ( ").append(Columns.ID.getName()).append(", ").append(Columns.USER.getName()).append(", ").append(Columns.AMOUNT_PAYABLE.getName()).append(", ").append(Columns.ISSUED_DATE.getName()).append(" ) VALUES (?, ?, ?, ?)").toString();
+        }
+        
+        static void bindValuesInBulkInsert(SQLiteStatement stmt, ContentValues values) {
+            int i = 1;
+            String value;
+            stmt.bindLong(i++, values.getAsLong(Columns.ID.getName()));
+            stmt.bindLong(i++, values.getAsLong(Columns.USER.getName()));
+            stmt.bindLong(i++, values.getAsLong(Columns.AMOUNT_PAYABLE.getName()));
+            value = values.getAsString(Columns.ISSUED_DATE.getName());
+            stmt.bindString(i++, value != null ? value : "");
+            
+        }
+        
+    }
+    
+    /**
+     * Created in version 1
+     */
     public static final class Transactions extends paySystemContent {
 
         private static final String LOG_TAG = Transactions.class.getSimpleName();
@@ -176,7 +295,7 @@ public abstract class paySystemContent {
         public static enum Columns implements ColumnMetadata {
             ID(BaseColumns._ID, "integer"),
             INVOICE_ID("invoice_id", "integer"),
-            USERNAME("username", "text"),
+            USER("user", "integer"),
             PROCESSED_DATE("processed_date", "text"),
             AMOUNT("amount", "integer"),
             DEBIT_CREDIT("debit_credit", "text");
@@ -208,7 +327,7 @@ public abstract class paySystemContent {
         public static final String[] PROJECTION = new String[] {
                 Columns.ID.getName(),
                 Columns.INVOICE_ID.getName(),
-                Columns.USERNAME.getName(),
+                Columns.USER.getName(),
                 Columns.PROCESSED_DATE.getName(),
                 Columns.AMOUNT.getName(),
                 Columns.DEBIT_CREDIT.getName()
@@ -227,13 +346,13 @@ public abstract class paySystemContent {
             		+ " (" 
             				+ Columns.ID.getName() + " " + Columns.ID.getType() 
             				+ ", " + Columns.INVOICE_ID.getName() + " " + Columns.INVOICE_ID.getType()
-            				+ ", " + Columns.USERNAME.getName() + " " + Columns.USERNAME.getType() 
+            				+ ", " + Columns.USER.getName() + " " + Columns.USER.getType() 
             				+ ", " + Columns.PROCESSED_DATE.getName() + " " + Columns.PROCESSED_DATE.getType()
             				+ ", " + Columns.AMOUNT.getName() + " "  + Columns.AMOUNT.getType() 
             				+ ", " + Columns.DEBIT_CREDIT.getName() + " " + Columns.DEBIT_CREDIT.getType() 
             				+ ", PRIMARY KEY (" + Columns.ID.getName() + ")" + ");");
 
-            db.execSQL("CREATE INDEX IF NOT EXISTS DbTransaction_username on " + TABLE_NAME + "(" + Columns.USERNAME.getName() + ");");
+           // db.execSQL("CREATE INDEX IF NOT EXISTS DbTransaction_username on " + TABLE_NAME + "(" + Columns.USERNAME.getName() + ");");
            // db.execSQL("CREATE INDEX IF NOT EXISTS DbClaim_title on " + TABLE_NAME + "(" + Columns.TITLE.getName() + ");");
             if (paySystemProvider.ACTIVATE_ALL_LOGS) {
                 Log.d(LOG_TAG, "Transactions | createTable end");
@@ -267,7 +386,7 @@ public abstract class paySystemContent {
         }
 
         static String getBulkInsertString() {
-            return new StringBuilder("INSERT INTO ").append(TABLE_NAME).append(" ( ").append(Columns.ID.getName()).append(", ").append(Columns.INVOICE_ID.getName()).append(", ").append(Columns.USERNAME.getName()).append(", ").append(Columns.PROCESSED_DATE.getName()).append(", ").append(Columns.AMOUNT.getName()).append(", ").append(Columns.DEBIT_CREDIT.getName()).append(" ) VALUES (?, ?, ?, ?, ?, ?)").toString();
+            return new StringBuilder("INSERT INTO ").append(TABLE_NAME).append(" ( ").append(Columns.ID.getName()).append(", ").append(Columns.INVOICE_ID.getName()).append(", ").append(Columns.USER.getName()).append(", ").append(Columns.PROCESSED_DATE.getName()).append(", ").append(Columns.AMOUNT.getName()).append(", ").append(Columns.DEBIT_CREDIT.getName()).append(" ) VALUES (?, ?, ?, ?, ?, ?)").toString();
         }
         
         static void bindValuesInBulkInsert(SQLiteStatement stmt, ContentValues values) {
@@ -275,7 +394,7 @@ public abstract class paySystemContent {
             String value;
             stmt.bindLong(i++, values.getAsLong(Columns.ID.getName()));
             stmt.bindLong(i++, values.getAsLong(Columns.INVOICE_ID.getName()));
-            value = values.getAsString(Columns.USERNAME.getName());
+            value = values.getAsString(Columns.USER.getName());
             stmt.bindString(i++, value != null ? value : "");
             value = values.getAsString(Columns.PROCESSED_DATE.getName());
             stmt.bindString(i++, value != null ? value : "");
@@ -283,6 +402,119 @@ public abstract class paySystemContent {
             value = values.getAsString(Columns.DEBIT_CREDIT.getName());
             stmt.bindString(i++, value != null ? value : "");
             
+        }
+        
+    }
+    /**
+     * Created in version 1
+     */
+    public static final class NFCDevices extends paySystemContent {
+
+        private static final String LOG_TAG = NFCDevices.class.getSimpleName();
+
+        public static final String TABLE_NAME = WSConfig.DB_TABLE_PREFIX + "nfcdevices";
+        public static final String TYPE_ELEM_TYPE = "vnd.android.cursor.item/paysystem_nfcdevices";
+        public static final String TYPE_DIR_TYPE = "vnd.android.cursor.dir/paysystem_nfcdevices";
+
+        public static final Uri CONTENT_URI = Uri.parse(paySystemContent.CONTENT_URI + "/" + TABLE_NAME);
+
+        public static enum Columns implements ColumnMetadata {
+            ID(BaseColumns._ID, "integer"),
+            USER("user", "integer"),
+            UID("uid", "text");
+
+            private final String mName;
+            private final String mType;
+
+            private Columns(String name, String type) {
+                mName = name;
+                mType = type;
+            }
+
+            @Override
+            public int getIndex() {
+                return ordinal();
+            }
+
+            @Override
+            public String getName() {
+                return mName;
+            }
+
+            @Override
+            public String getType() {
+                return mType;
+            }
+        }
+
+        public static final String[] PROJECTION = new String[] {
+                Columns.ID.getName(),
+                Columns.USER.getName(),
+                Columns.UID.getName(),
+                
+        };
+
+        private NFCDevices() {
+            // No private constructor
+        }
+
+        public static void createTable(SQLiteDatabase db) {
+            if (paySystemProvider.ACTIVATE_ALL_LOGS) {
+                Log.d(LOG_TAG, "NFCDevices | createTable start");
+            }
+            db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME 
+            		+ " (" 
+            				+ Columns.ID.getName() + " " + Columns.ID.getType() 
+            				+ ", " + Columns.USER.getName() + " " + Columns.USER.getType()
+            				+ ", " + Columns.UID.getName() + " " + Columns.UID.getType() 
+            				+ ", PRIMARY KEY (" + Columns.ID.getName() + ")" + ");");
+
+            //db.execSQL("CREATE INDEX IF NOT EXISTS DbClaim_username on " + TABLE_NAME + "(" + Columns.USERNAME.getName() + ");");
+            //db.execSQL("CREATE INDEX IF NOT EXISTS DbClaim_title on " + TABLE_NAME + "(" + Columns.TITLE.getName() + ");");
+            if (paySystemProvider.ACTIVATE_ALL_LOGS) {
+                Log.d(LOG_TAG, "NFCDevices | createTable end");
+            }
+        }
+
+        // Version 1 : Creation of the table
+        public static void upgradeTable(SQLiteDatabase db, int oldVersion, int newVersion) {
+            if (paySystemProvider.ACTIVATE_ALL_LOGS) {
+                Log.d(LOG_TAG, "DbNFCDevices | upgradeTable start");
+            }
+
+            if (oldVersion < 1) {
+                Log.i(LOG_TAG, "Upgrading from version " + oldVersion + " to " + newVersion
+                        + ", data will be lost!");
+
+                db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME + ";");
+                createTable(db);
+                return;
+            }
+
+
+            if (oldVersion != newVersion) {
+                throw new IllegalStateException("Error upgrading the database to version "
+                        + newVersion);
+            }
+
+            if (paySystemProvider.ACTIVATE_ALL_LOGS) {
+                Log.d(LOG_TAG, "NFCDevices | upgradeTable end");
+            }
+        }
+
+        static String getBulkInsertString() {
+            return new StringBuilder("INSERT INTO ").append(TABLE_NAME).append(" ( ").append(Columns.ID.getName()).append(", ").append(Columns.USER.getName()).append(", ").append(Columns.UID.getName()).append(" ) VALUES (?, ?, ?)").toString();
+        }
+        
+        static void bindValuesInBulkInsert(SQLiteStatement stmt, ContentValues values) {
+            int i = 1;
+            String value;
+            stmt.bindLong(i++, values.getAsLong(Columns.ID.getName()));
+            value = values.getAsString(Columns.USER.getName());
+            stmt.bindString(i++, value != null ? value : "");
+            value = values.getAsString(Columns.UID.getName());
+            stmt.bindString(i++, value != null ? value : "");
+           
         }
         
     }

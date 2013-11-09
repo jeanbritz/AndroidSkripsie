@@ -11,7 +11,7 @@
 
     <!-- Dialog texts -->
     <string name="dialog_error_connection_error_title">Connection error</string>
-    <string name="dialog_error_connection_error_message">A connetion error occurred. Please verify
+    <string name="dialog_error_connection_error_message">A connection error occurred. Please verify
  that you are connected to an EDGE, 3G or Wifi network.</string>
     <string name="dialog_error_data_error_title">Incorrect data</string>
     <string name="dialog_error_data_error_message">Received data is invalid.</string>
@@ -30,11 +30,67 @@
     <string name="refresh_menu_refresh">Refresh</string>
     <string name="home_claim_list_title">Claims</string>
     <string name="home_claim_list_description">List of tickets and vouchers to claim at an NFC Access Point</string>
-    <string name="authentication_b_load">Auth</string>
+    <string name="authentication_b_load">Log in</string>
     <string name="transaction_list_b_load">Load</string>
     <string name="home_transaction_list_title">Transactions</string>
     <string name="home_transaction_list_description">View transactions</string>
     <string name="transaction_list_title">NFCPaySystem &gt; Transactions</string>
+    <string name="location_mcc_title">MCC</string>
+    <string name="location_mnc_title">MNC</string>
+    <string name="location_lac_title">LAC</string>
+    <string name="location_cellid_title">Cell ID</string>
+    <string name="location_network_title">Network</string>
+    <string name="location_lat_title">lat</string>
+    <string name="location_long_title">Long</string>
+    <string name="location_range_title">Range</string>
+    <string name="home_invoice_list_title">Invoices</string>
+    <string name="home_invoice_list_description">Invoices</string>
+    <string name="invoice_list_b_load">Load</string>
+    <string name="invoice_list_title">Invoices</string>
+	
+    
+    <!-- CrudSyncNfcdeviceListActivity and CrudAsyncNfcdeviceListActivity texts -->
+    <string name="crud_nfcdevice_list_tv_empty_loading">Loading …</string>
+    <string name="crud_nfcdevice_list_tv_empty_no_results">0 nfcdevice found</string>
+    <string name="crud_nfcdevice_list_menu_add">Add</string>
+    <string name="crud_nfcdevice_list_menu_delete_all">Delete all</string>
+    <string name="crud_nfcdevice_list_context_menu_edit">Edit</string>
+    <string name="crud_nfcdevice_list_context_menu_delete">Delete</string>
+    <string name="crud_nfcdevice_list_dialog_delete_all_confirm_title">Delete all</string>
+    <string name="crud_nfcdevice_list_dialog_delete_all_confirm_message">All the nfcdevices will be
+        deleted.</string>
+    <string name="crud_nfcdevice_list_dialog_delete_confirm_title">Delete</string>
+    <string name="crud_nfcdevice_list_dialog_delete_confirm_message">%1$s will be deleted.</string>
 
+    <!-- CrudSyncnfcdeviceListActivity texts -->
+    <string name="crud_sync_nfcdevice_list_title">DataDroid PoC > nfcdevices (CRUD) (Sync)</string>
+
+    <!-- CrudSyncnfcdeviceViewActivity and CrudAsyncnfcdeviceViewActivity texts -->
+    <string name="crud_nfcdevice_view_tv_android_version">Android version</string>
+    <string name="crud_nfcdevice_view_tv_screen_size">Screen size</string>
+    <string name="crud_nfcdevice_view_tv_screen_size_format">%1$.1f</string>
+    <string name="crud_nfcdevice_view_tv_price">Price</string>
+    <string name="crud_nfcdevice_view_tv_price_format">%1$d $</string>
+    <string name="crud_nfcdevice_view_menu_edit">Edit</string>
+    <string name="crud_nfcdevice_view_menu_delete">Delete</string>
+    <string name="crud_nfcdevice_view_dialog_delete_confirm_title">Delete</string>
+    <string name="crud_nfcdevice_view_dialog_delete_confirm_message">%1$s will be deleted.</string>
+
+    <!-- CrudSyncNfcDeviceViewActivity texts -->
+    <string name="crud_sync_nfcdevice_view_title">DataDroid PoC > View nfcdevice (CRUD) (Sync)</string>
+
+    <!-- CrudSyncNfcDeviceAddEditActivity and CrudAsyncnfcdeviceAddEditActivity -->
+    <string name="crud_nfcdevice_add_edit_tv_name">Name :</string>
+    <string name="crud_nfcdevice_add_edit_tv_manufacturer">Manufacturer :</string>
+    <string name="crud_nfcdevice_add_edit_tv_android_version">Android version :</string>
+    <string name="crud_nfcdevice_add_edit_tv_screen_size">Screen size :</string>
+    <string name="crud_nfcdevice_add_edit_tv_price">Price :</string>
+    <string name="crud_nfcdevice_add_edit_b_submit">Submit</string>
+
+    <!-- CrudSyncNfcDeviceAddEditActivity texts -->
+    <string name="crud_sync_nfcdevice_add_title">DataDroid PoC > New nfcdevice (CRUD) (Sync)</string>
+    <string name="crud_sync_nfcdevice_edit_title">DataDroid PoC > Edit nfcdevice (CRUD) (Sync)</string>
+    <string name="btn_make_payment_title">Pay!</string>
+    <string name="payment_title">Make Payment</string>
    
 </resources>

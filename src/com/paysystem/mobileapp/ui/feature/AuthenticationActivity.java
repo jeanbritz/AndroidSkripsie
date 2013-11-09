@@ -1,24 +1,38 @@
 package com.paysystem.mobileapp.ui.feature;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.foxykeep.datadroid.requestmanager.Request;
 import com.foxykeep.datadroid.requestmanager.RequestManager.RequestListener;
 import com.paysystem.mobileapp.R;
+import com.paysystem.mobileapp.data.operation.AuthenticationOperation;
 import com.paysystem.mobileapp.data.requestmanager.paySystemRequestFactory;
 import com.paysystem.mobileapp.dialogs.ConnectionErrorDialogFragment;
 import com.paysystem.mobileapp.dialogs.ConnectionErrorDialogFragment.ConnectionErrorDialogListener;
 import com.paysystem.mobileapp.ui.DataDroidActivity;
+import com.paysystem.mobileapp.ui.HomeActivity;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public final class AuthenticationActivity extends DataDroidActivity implements RequestListener,
 OnClickListener, ConnectionErrorDialogListener {
 
-private TextView mTVResult;
+private EditText mUsername;
+private EditText mPassword;
+
+boolean loginStatus = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,43 +70,63 @@ private TextView mTVResult;
 
 	private void bindViews() {
 		((Button) findViewById(R.id.b_load)).setOnClickListener(this);
-		
-		mTVResult = (TextView) findViewById(R.id.tv_result);
+		mUsername = (EditText) findViewById(R.id.username);
+		mPassword = (EditText) findViewById(R.id.password);
 	}
 
-	private void callAuthenticationWSWithout() {
-		mTVResult.setText("");
-		setProgressBarIndeterminateVisibility(true);
-		Request request = paySystemRequestFactory.authenticationRequest(false);
-		mRequestManager.execute(request, this);
-		mRequestList.add(request);
-	}
+	
 
 	private void callAuthenticationWSWith() {
-		mTVResult.setText("");
+		
 		setProgressBarIndeterminateVisibility(true);
 		Request request = paySystemRequestFactory.authenticationRequest(true);
+		
+		request.put("username", mUsername.getText().toString());
+		request.put("password", mPassword.getText().toString());
 		mRequestManager.execute(request, this);
 		mRequestList.add(request);
+		//if (request.contains(AuthenticationOperation.PARAM_WITH_AUTHENTICATE))
+		//{
+		//	request.getString(AuthenticationOperation.PARAM_WITH_AUTHENTICATE);
+		//}
+		
 	}
 
 	@Override
 	public void onClick(View view) {
 		switch (view.getId()) {
 		case R.id.b_load:
-			callAuthenticationWSWithout();
+			callAuthenticationWSWith();
         break;
         }
 	}
 
+	@SuppressLint("ShowToast")
 	@Override
 	public void onRequestFinished(Request request, Bundle resultData) {
 		if (mRequestList.contains(request)) {
 			setProgressBarIndeterminateVisibility(false);
 			mRequestList.remove(request);
-
-			mTVResult.setText(resultData
-					.getString(paySystemRequestFactory.BUNDLE_EXTRA_AUTHENTICATION_RESULT));
+			
+			try {
+				Log.i("resultData", (String) resultData.get(paySystemRequestFactory.BUNDLE_EXTRA_AUTHENTICATION_RESULT));
+				JSONObject json = new JSONObject(""+resultData.get(paySystemRequestFactory.BUNDLE_EXTRA_AUTHENTICATION_RESULT));
+				loginStatus = json.has("detail");
+				
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			if(!loginStatus)
+			{
+				Intent intent = new Intent(this, HomeActivity.class);
+				startActivity(intent);
+			}
+			else
+			{
+				Toast.makeText(this, "Incorrect username/password", Toast.LENGTH_LONG).show();
+			}
 		}
 	}
 

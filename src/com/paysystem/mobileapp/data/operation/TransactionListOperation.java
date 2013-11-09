@@ -3,8 +3,10 @@ package com.paysystem.mobileapp.data.operation;
 import android.content.ContentProviderOperation;
 import android.content.Context;
 import android.content.OperationApplicationException;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.util.Base64;
 import android.util.Log;
 
 import com.foxykeep.datadroid.exception.ConnectionException;
@@ -21,18 +23,32 @@ import com.paysystem.mobileapp.data.provider.paySystemContent.Transactions;
 import com.paysystem.mobileapp.data.provider.paySystemProvider;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class TransactionListOperation implements Operation {
 
     @Override
     public Bundle execute(Context context, Request request) throws ConnectionException,
             DataException {
-        
+    	Map <String, String> header = new HashMap<String, String>();
 
-        String url = WSConfig.WS_TRANSACTION_LIST_URL_JSON;
+    	SharedPreferences sharedPrefs = context.getSharedPreferences(
+        		AuthenticationOperation.PARAM_WITH_AUTHENTICATE,
+                Context.MODE_PRIVATE);
+    	
+    	String username = sharedPrefs.getString("Username", "Anonymous");
+    	String auth = sharedPrefs.getString("Authorization", "None");
+    	String url = WSConfig.API_URL + username + "/transactions?format=json" ;
+        
         NetworkConnection networkConnection = new NetworkConnection(context, url);
+        
+        Log.i("Authorization", auth );
+        header.put("Authorization", auth);
+        networkConnection.setHeaderList((HashMap<String, String>) header);
         ConnectionResult result = networkConnection.execute();
-        Log.i("HTTP REQUEST", "GET" + url);
+        Log.i("HTTP Request", "GET : " + url);
+        
         ArrayList<Transaction> transactionList = TransactionListJsonFactory.parseResult(result.body);
         
 

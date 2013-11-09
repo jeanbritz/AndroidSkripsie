@@ -1,5 +1,5 @@
 package com.paysystem.mobileapp.data.factory;
-/*
+
 
 import android.os.Bundle;
 import android.util.Log;
@@ -8,8 +8,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.foxykeep.datadroid.exception.DataException;
 import com.paysystem.mobileapp.config.JSONTag;
 import com.paysystem.mobileapp.data.model.User;
+import com.paysystem.mobileapp.data.requestmanager.paySystemRequestFactory;
 
 import java.util.ArrayList;
 
@@ -22,33 +24,27 @@ public final class UserListJsonFactory {
     }
 
     public static Bundle parseResult(String wsResponse) throws DataException {
-        ArrayList<User> userList = new ArrayList<User>();
-
+    	User user = new User();
+    	
         try {
-            JSONObject parser = new JSONObject(wsResponse);
-            JSONObject jsonRoot = parser.getJSONObject(JSONTag.USER_LIST_ELEM_USERS);
-            JSONArray jsonPersonArray = jsonRoot.getJSONArray(JSONTag.USER_LIST_ELEM_USER);
-            int size = jsonPersonArray.length();
-            for (int i = 0; i < size; i++) {
-                JSONObject jsonPerson = jsonPersonArray.getJSONObject(i);
-                User user = new User();
-
-                user.first_name = jsonPerson.getString(JSONTag.USER_LIST_ELEM_USER_FIRST_NAME);
-                user.last_name = jsonPerson.getString(JSONTag.USER_LIST_ELEM_USER_LAST_NAME);
-                user.email = jsonPerson.getString(JSONTag.USER_LIST_ELEM_USER_EMAIL);
-                user.contactnumber = jsonPerson.getString(JSONTag.USER_LIST_ELEM_USER_CONTACTNUMBER);
-                user.acct_balance = jsonPerson.getString(JSONTag.USER_LIST_ELEM_USER_ACCT_BALANCE);
-                user.acct_available = jsonPerson.getString(JSONTag.USER_LIST_ELEM_USER_ACCT_AVAILABLE);
-            	userList.add(user);
-            }
+        		
+        		JSONArray jsonUser =  new JSONArray(wsResponse);
+        		JSONObject jsonUserObj = jsonUser.getJSONObject(0); 
+                user.first_name = jsonUserObj.getString("first_name");
+                user.last_name = jsonUserObj.getString(JSONTag.USER_LIST_ELEM_USER_LAST_NAME);
+                user.email = jsonUserObj.getString(JSONTag.USER_LIST_ELEM_USER_EMAIL);
+                user.contactnumber = jsonUserObj.getString(JSONTag.USER_LIST_ELEM_USER_CONTACTNUMBER);
+                user.acct_balance = jsonUserObj.getString(JSONTag.USER_LIST_ELEM_USER_ACCT_BALANCE);
+                user.acct_available = jsonUserObj.getString(JSONTag.USER_LIST_ELEM_USER_ACCT_AVAILABLE);
+            	
+            
         } catch (JSONException e) {
             Log.e(TAG, "JSONException", e);
             throw new DataException(e);
+               
         }
-
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(PoCRequestFactory.BUNDLE_EXTRA_CITY_LIST, userList);
+        Bundle bundle = new Bundle(); 
+        bundle.putParcelable(paySystemRequestFactory.BUNDLE_EXTRA_AUTHENTICATION_RESULT, user);
         return bundle;
     }
 }
-*/

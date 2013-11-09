@@ -7,6 +7,7 @@ import com.paysystem.mobileapp.ui.feature.AuthenticationActivity;
 import com.paysystem.mobileapp.ui.feature.CustomRequestExceptionActivity;
 import com.paysystem.mobileapp.ui.feature.RefreshActivity;
 import com.paysystem.mobileapp.ui.ws.ClaimListActivity;
+import com.paysystem.mobileapp.ui.ws.InvoiceListActivity;
 import com.paysystem.mobileapp.ui.ws.TransactionListActivity;
 
 
@@ -62,6 +63,10 @@ public final class HomeActivity extends FragmentActivity implements OnItemClickL
 		
 		mListAdapter.add(new Sample(R.string.home_transaction_list_title,
 				R.string.home_transaction_list_description, TransactionListActivity.class));
+		
+		mListAdapter.add(new Sample(R.string.home_invoice_list_title,
+				R.string.home_invoice_list_description, InvoiceListActivity.class));
+		
 		
 		mListAdapter.notifyDataSetChanged();
 	}

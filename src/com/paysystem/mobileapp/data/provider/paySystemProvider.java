@@ -1,6 +1,7 @@
 package com.paysystem.mobileapp.data.provider;
 
 import com.paysystem.mobileapp.data.provider.paySystemContent.Claims;
+import com.paysystem.mobileapp.data.provider.paySystemContent.Invoices;
 import com.paysystem.mobileapp.data.provider.paySystemContent.Transactions;
 
 import android.content.ContentProvider;
@@ -32,7 +33,7 @@ public final class paySystemProvider extends ContentProvider {
 
     /* package */ static final boolean ACTIVATE_ALL_LOGS = true;
 
-    protected static final String DATABASE_NAME = "paySystemProvider.db";
+    protected static final String DATABASE_NAME = "paySystemProvider2.db";
 
     public static final String AUTHORITY = "com.paysystem.mobileapp.provider.paySystemProvider";
 
@@ -49,7 +50,9 @@ public final class paySystemProvider extends ContentProvider {
         CLAIMS(Claims.TABLE_NAME, Claims.TABLE_NAME, Claims.TYPE_ELEM_TYPE),
         CLAIMS_ID(Claims.TABLE_NAME + "/#", Claims.TABLE_NAME, Claims.TYPE_DIR_TYPE),
         TRANSACTIONS(Transactions.TABLE_NAME, Transactions.TABLE_NAME, Transactions.TYPE_ELEM_TYPE),
-        TRANSACTIONS_ID(Transactions.TABLE_NAME + "/#", Transactions.TABLE_NAME, Transactions.TYPE_DIR_TYPE);
+        TRANSACTIONS_ID(Transactions.TABLE_NAME + "/#", Transactions.TABLE_NAME, Transactions.TYPE_DIR_TYPE),
+        INVOICES(Invoices.TABLE_NAME, Invoices.TABLE_NAME, Invoices.TYPE_ELEM_TYPE),
+        INVOICES_ID(Invoices.TABLE_NAME + "/#", Invoices.TABLE_NAME, Invoices.TYPE_DIR_TYPE);
         
         private String mTableName;
         private String mType;
@@ -111,6 +114,7 @@ public final class paySystemProvider extends ContentProvider {
             // Create all tables here; each class has its own method
             Claims.createTable(db);
             Transactions.createTable(db);
+            Invoices.createTable(db);
         }
 
         @Override
@@ -119,6 +123,7 @@ public final class paySystemProvider extends ContentProvider {
             // Upgrade all tables here; each class has its own method
             Claims.upgradeTable(db, oldVersion, newVersion);
             Transactions.upgradeTable(db, oldVersion, newVersion);
+            Invoices.upgradeTable(db, oldVersion, newVersion);
         }
 
         @Override
@@ -126,6 +131,7 @@ public final class paySystemProvider extends ContentProvider {
         	
         	 Claims.createTable(db);
         	 Transactions.createTable(db);
+        	 Invoices.createTable(db);
         	
         }
     }
@@ -141,7 +147,7 @@ public final class paySystemProvider extends ContentProvider {
         String id;
 
         if (ACTIVATE_ALL_LOGS) {
-            Log.d(LOG_TAG, "delete: uri=" + uri + ", match is " + uriType.name());
+            Log.d(LOG_TAG, "delete: URI = " + uri + ", match is " + uriType.name());
         }
 
         int result = -1;
@@ -156,11 +162,28 @@ public final class paySystemProvider extends ContentProvider {
                 result = db.delete(uriType.getTableName(), selection, selectionArgs);
                 break;
             
+            case TRANSACTIONS_ID:
+                id = uri.getPathSegments().get(1);
+                result = db.delete(uriType.getTableName(), whereWithId(selection),
+                        addIdToSelectionArgs(id, selectionArgs));
+                break;
+            
+            case TRANSACTIONS:
+                result = db.delete(uriType.getTableName(), selection, selectionArgs);
+                break;
+                
+            case INVOICES_ID:
+                id = uri.getPathSegments().get(1);
+                result = db.delete(uriType.getTableName(), whereWithId(selection),
+                        addIdToSelectionArgs(id, selectionArgs));
+                break;
+            case INVOICES:
+                result = db.delete(uriType.getTableName(), selection, selectionArgs);
+                break;
         }
 
         getContext().getContentResolver().notifyChange(uri, null);
-        return result;
-    }
+        return result;    }
 
     @Override
     public String getType(Uri uri) {
@@ -178,7 +201,7 @@ public final class paySystemProvider extends ContentProvider {
         long id;
 
         if (ACTIVATE_ALL_LOGS) {
-            Log.d(LOG_TAG, "insert: uri=" + uri + ", match is " + uriType.name());
+            Log.d(LOG_TAG, "insert: URI = " + uri + ", match is " + uriType.name());
         }
 
         Uri resultUri;
@@ -188,12 +211,18 @@ public final class paySystemProvider extends ContentProvider {
                 id = db.insert(uriType.getTableName(), "claims", values);
                 resultUri = id == -1 ? null : ContentUris.withAppendedId(uri, id);
                 break;
-            default:
-                throw new IllegalArgumentException("Unknown URI " + uri);
-            
             case TRANSACTIONS:
             	id = db.insert(uriType.getTableName(), "transactions", values);
             	resultUri = id == -1 ? null : ContentUris.withAppendedId(uri, id);
+            	break;
+            case INVOICES:
+            	id = db.insert(uriType.getTableName(), "invoices", values);
+            	resultUri = id == -1 ? null : ContentUris.withAppendedId(uri, id);
+            	break;
+            	
+            default:
+                throw new IllegalArgumentException("Unknown URI " + uri);
+                
         }
 
         // Notify with the base uri, not the new uri (nobody is watching a new
@@ -231,7 +260,7 @@ public final class paySystemProvider extends ContentProvider {
         SQLiteDatabase db = getDatabase(context);
 
         if (ACTIVATE_ALL_LOGS) {
-            Log.d(LOG_TAG, "bulkInsert: uri=" + uri + ", match is " + uriType.name());
+            Log.d(LOG_TAG, "bulkInsert: URI = " + uri + ", match is " + uriType.name());
         }
 
         int numberInserted = 0;
@@ -252,7 +281,38 @@ public final class paySystemProvider extends ContentProvider {
                     numberInserted = values.length;
 
                     if (ACTIVATE_ALL_LOGS) {
-                        Log.d(LOG_TAG, "bulkInsert: uri=" + uri + " | nb inserts : " + numberInserted);
+                        Log.d(LOG_TAG, "bulkInsert: URI = " + uri + " | nb inserts : " + numberInserted);
+                    }
+                    break;
+                    
+                case TRANSACTIONS:
+                    insertStmt = db.compileStatement(Transactions.getBulkInsertString());
+                    for (ContentValues value : values) {
+                    	Transactions.bindValuesInBulkInsert(insertStmt, value);
+                        insertStmt.execute();
+                        insertStmt.clearBindings();
+                    }
+                    insertStmt.close();
+                    db.setTransactionSuccessful();
+                    numberInserted = values.length;
+
+                    if (ACTIVATE_ALL_LOGS) {
+                        Log.d(LOG_TAG, "bulkInsert: URI = " + uri + " | nb inserts : " + numberInserted);
+                    }
+                    break;
+                case INVOICES:
+                    insertStmt = db.compileStatement(Invoices.getBulkInsertString());
+                    for (ContentValues value : values) {
+                    	Invoices.bindValuesInBulkInsert(insertStmt, value);
+                        insertStmt.execute();
+                        insertStmt.clearBindings();
+                    }
+                    insertStmt.close();
+                    db.setTransactionSuccessful();
+                    numberInserted = values.length;
+
+                    if (ACTIVATE_ALL_LOGS) {
+                        Log.d(LOG_TAG, "bulkInsert: URI = " + uri + " | nb inserts : " + numberInserted);
                     }
                     break;
 
@@ -281,7 +341,7 @@ public final class paySystemProvider extends ContentProvider {
         String id;
 
         if (ACTIVATE_ALL_LOGS) {
-            Log.d(LOG_TAG, "query: uri=" + uri + ", match is " + uriType.name());
+            Log.d(LOG_TAG, "query: URI = " + uri + ", match is " + uriType.name());
         }
 
         switch (uriType) {
@@ -300,6 +360,15 @@ public final class paySystemProvider extends ContentProvider {
                          addIdToSelectionArgs(id, selectionArgs), null, null, sortOrder);
                  break;
             case TRANSACTIONS:
+            	c = db.query(uriType.getTableName(), projection, selection, selectionArgs,
+                        null, null, sortOrder);
+            	break;
+            case INVOICES_ID:
+            	id = uri.getPathSegments().get(1);
+            	 c = db.query(uriType.getTableName(), projection, whereWithId(selection),
+                         addIdToSelectionArgs(id, selectionArgs), null, null, sortOrder);
+                 break;
+            case INVOICES:
             	c = db.query(uriType.getTableName(), projection, selection, selectionArgs,
                         null, null, sortOrder);
             	break;
@@ -347,7 +416,7 @@ public final class paySystemProvider extends ContentProvider {
         SQLiteDatabase db = getDatabase(context);
 
         if (ACTIVATE_ALL_LOGS) {
-            Log.d(LOG_TAG, "update: uri=" + uri + ", match is " + uriType.name());
+            Log.d(LOG_TAG, "update: URI = " + uri + ", match is " + uriType.name());
         }
 
         int result = -1;
@@ -367,6 +436,13 @@ public final class paySystemProvider extends ContentProvider {
                 result = db.update(uriType.getTableName(), values, whereWithId(selection),
                     addIdToSelectionArgs(id, selectionArgs));
             case TRANSACTIONS:
+            	result = db.update(uriType.getTableName(), values, selection, selectionArgs);
+                break;
+            case INVOICES_ID:
+            	id = uri.getPathSegments().get(1);
+                result = db.update(uriType.getTableName(), values, whereWithId(selection),
+                    addIdToSelectionArgs(id, selectionArgs));
+            case INVOICES:
             	result = db.update(uriType.getTableName(), values, selection, selectionArgs);
                 break;
         }

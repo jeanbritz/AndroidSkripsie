@@ -32,7 +32,6 @@ import com.paysystem.mobileapp.ui.DataDroidActivity;
 public final class TransactionListActivity extends DataDroidActivity implements RequestListener,
 	OnClickListener, ConnectionErrorDialogListener, LoaderCallbacks<Cursor> {
 
-	private Spinner mSpinnerReturnFormat;
 	private ListView mListView;
 	private TransactionListAdapter mListAdapter;
 
@@ -197,9 +196,11 @@ public final class TransactionListActivity extends DataDroidActivity implements 
 
 		public void populateView(Cursor c) {
     
-			mTextViewInvoiceId.setText(String.valueOf(c.getInt(Transactions.Columns.INVOICE_ID.getIndex())));
+			mTextViewInvoiceId.setText("Invoice ID : "+String.valueOf(c.getInt(Transactions.Columns.INVOICE_ID.getIndex())));
+			
 			c.copyStringToBuffer(Transactions.Columns.PROCESSED_DATE.getIndex(),
 					mCharArrayBufferProcessedDate);
+			
 			mTextViewProcessedDate.setText(mCharArrayBufferProcessedDate.data, 0,
 					mCharArrayBufferProcessedDate.sizeCopied);
 			mTextViewAmount.setText(String.valueOf(c.getInt(Transactions.Columns.AMOUNT.getIndex())));
